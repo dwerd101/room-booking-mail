@@ -5,8 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import ru.roombooking.mail.exception.MailDoNotSendException;
+import ru.roombooking.mail.model.dto.MailRequest;
 import ru.roombooking.mail.model.dto.RecordTableDTO;
-import ru.roombooking.mail.model.response.SuccessResponse;
+import ru.roombooking.mail.response.SuccessResponse;
 import ru.roombooking.mail.service.mail.MailSenderService;
 
 @Service
@@ -89,5 +90,15 @@ public class NotificationService {
     private void setCurrentZone(RecordTableDTO recordTableDTO) {
         recordTableDTO.setStart(recordTableDTO.getStart().withZoneSameInstant(recordTableDTO.getTimeZone()));
         recordTableDTO.setEnd(recordTableDTO.getEnd().withZoneSameInstant(recordTableDTO.getTimeZone()));
+    }
+
+
+    public SuccessResponse send (MailRequest mailRequest) {
+        try {
+            mailSenderService.send(mailRequest.getEmailTo(), mailRequest.getSubject(), mailRequest.getMessage());
+            return new SuccessResponse(0L);
+        } catch (Exception e) {
+            throw new MailDoNotSendException();
+        }
     }
 }

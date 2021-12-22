@@ -1,4 +1,4 @@
-package ru.roombooking.mail.model.response;
+package ru.roombooking.mail.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

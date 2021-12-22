@@ -3,8 +3,9 @@ package ru.roombooking.mail.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.roombooking.mail.model.dto.MailRequest;
 import ru.roombooking.mail.model.dto.RecordTableDTO;
-import ru.roombooking.mail.model.response.SuccessResponse;
+import ru.roombooking.mail.response.SuccessResponse;
 import ru.roombooking.mail.service.mail.impl.NotificationService;
 
 @RestController
@@ -13,23 +14,27 @@ import ru.roombooking.mail.service.mail.impl.NotificationService;
 public class MailController {
     private final NotificationService notificationService;
 
-
-    @PostMapping("/send/{roomId}")
+    // FIXME: 16.12.2021 Изменены url с "send" на "send-confirmation"
+    @PostMapping("/send-confirmation/{roomId}")
     public ResponseEntity<SuccessResponse> sendConfirmMessageToEmployee(@RequestBody RecordTableDTO recordTableDTO,
                                                                         @PathVariable String roomId) {
         return ResponseEntity.ok(notificationService.sendConfirmMessageToEmployee(recordTableDTO, roomId));
 
     }
 
-    @PutMapping("/send/")
+    @PutMapping("/send-confirmation/")
     public ResponseEntity<SuccessResponse> sendConfirmUpdateMessageToEmployee(@RequestBody RecordTableDTO previousRecordTableDTO,
                                                                              @RequestBody RecordTableDTO recordTableDTO) {
         return ResponseEntity.ok(notificationService.sendConfirmUpdateMessageToEmployee(previousRecordTableDTO, recordTableDTO));
     }
 
-    @DeleteMapping("/delete/")
+    @DeleteMapping("/delete-confirmation/")
     public ResponseEntity<SuccessResponse> sendConfirmDeleteMessageToEmployee(@RequestBody RecordTableDTO recordTableDTO) {
         return ResponseEntity.ok(notificationService.sendConfirmDeleteMessageToEmployee(recordTableDTO));
     }
 
+    @PostMapping("/send")
+    public ResponseEntity<SuccessResponse> send (@RequestBody MailRequest mailRequest) {
+        return ResponseEntity.ok(notificationService.send(mailRequest));
+    }
 }
