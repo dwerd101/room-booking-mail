@@ -22,13 +22,13 @@ public class MailController {
 
     }
 
-    @PutMapping("/send-confirmation/")
+    @PostMapping("/send-confirmation/")
     public ResponseEntity<SuccessResponse> sendConfirmUpdateMessageToEmployee(@RequestBody RecordTableDTO previousRecordTableDTO,
                                                                              @RequestBody RecordTableDTO recordTableDTO) {
         return ResponseEntity.ok(notificationService.sendConfirmUpdateMessageToEmployee(previousRecordTableDTO, recordTableDTO));
     }
 
-    @DeleteMapping("/delete-confirmation/")
+    @PostMapping("/delete-confirmation/")
     public ResponseEntity<SuccessResponse> sendConfirmDeleteMessageToEmployee(@RequestBody RecordTableDTO recordTableDTO) {
         return ResponseEntity.ok(notificationService.sendConfirmDeleteMessageToEmployee(recordTableDTO));
     }
