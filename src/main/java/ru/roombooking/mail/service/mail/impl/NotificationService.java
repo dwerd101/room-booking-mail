@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import ru.roombooking.mail.exception.MailDoNotSendException;
 import ru.roombooking.mail.model.dto.MailRequest;
 import ru.roombooking.mail.model.dto.RecordTableDTO;
-import ru.roombooking.mail.response.SuccessResponse;
 import ru.roombooking.mail.service.mail.MailSenderService;
 
 @Service
@@ -18,13 +17,12 @@ public class NotificationService {
     private String recordUrl;
     private final MailSenderService mailSenderService;
 
-    public SuccessResponse sendConfirmMessageToEmployee(RecordTableDTO recordTableDTO, String roomId) {
+    public void sendConfirmMessageToEmployee(RecordTableDTO recordTableDTO, String roomId) {
         try {
             recordTableDTO.setRoomId(roomId);
             String subject = "Бронирование комнаты №" + recordTableDTO.getRoomId();
             String message = getMessageForSaveRecord(recordTableDTO);
             mailSenderService.send(recordTableDTO.getEmail(), subject, message);
-            return new SuccessResponse(0L);
         } catch (Exception e) {
             throw new MailDoNotSendException();
         }
@@ -39,13 +37,12 @@ public class NotificationService {
                 + "Подробнее: " + recordUrl + recordTableDTO.getRoomId();
     }
 
-    public SuccessResponse sendConfirmUpdateMessageToEmployee(RecordTableDTO previousRecordTableDTO, RecordTableDTO recordTableDTO) {
+    public void sendConfirmUpdateMessageToEmployee(RecordTableDTO previousRecordTableDTO, RecordTableDTO recordTableDTO) {
         try {
             setCurrentZone(recordTableDTO);
             String subject = "Изменение в бронирование комнаты №" + recordTableDTO.getRoomId();
             String message = getMessageForUpdateRecord(previousRecordTableDTO, recordTableDTO);
             mailSenderService.send(recordTableDTO.getEmail(), subject, message);
-            return new SuccessResponse(0L);
         } catch (Exception e) {
             throw new MailDoNotSendException();
         }
@@ -65,13 +62,12 @@ public class NotificationService {
                 + "Подробнее: " + recordUrl  + recordTableDTO.getRoomId();
     }
 
-    public SuccessResponse sendConfirmDeleteMessageToEmployee(RecordTableDTO recordTableDTO) {
+    public void sendConfirmDeleteMessageToEmployee(RecordTableDTO recordTableDTO) {
         try {
             // FIXME: 27.12.2021 убрать заглушку
             recordTableDTO.setRoomId("1");
             String subject = "Отмена бронирования комнаты №" + recordTableDTO.getRoomId();
             mailSenderService.send(recordTableDTO.getEmail(), subject, getMessageForDeleteRecord(recordTableDTO));
-            return new SuccessResponse(0L);
         } catch (Exception e) {
             throw new MailDoNotSendException();
         }
@@ -94,10 +90,9 @@ public class NotificationService {
     }
 
 
-    public SuccessResponse send (MailRequest mailRequest) {
+    public void send (MailRequest mailRequest) {
         try {
             mailSenderService.send(mailRequest.getEmailTo(), mailRequest.getSubject(), mailRequest.getMessage());
-            return new SuccessResponse(0L);
         } catch (Exception e) {
             throw new MailDoNotSendException();
         }
