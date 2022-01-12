@@ -20,6 +20,7 @@ public class NotificationService {
     public void sendConfirmMessageToEmployee(RecordTableDTO recordTableDTO, String roomId) {
         try {
             recordTableDTO.setRoomId(roomId);
+            setCurrentZone(recordTableDTO);
             String subject = "Бронирование комнаты №" + recordTableDTO.getRoomId();
             String message = getMessageForSaveRecord(recordTableDTO);
             mailSenderService.send(recordTableDTO.getEmail(), subject, message);
@@ -40,6 +41,7 @@ public class NotificationService {
     public void sendConfirmUpdateMessageToEmployee(RecordTableDTO previousRecordTableDTO, RecordTableDTO recordTableDTO) {
         try {
             setCurrentZone(recordTableDTO);
+            setCurrentZone(previousRecordTableDTO);
             String subject = "Изменение в бронирование комнаты №" + recordTableDTO.getRoomId();
             String message = getMessageForUpdateRecord(previousRecordTableDTO, recordTableDTO);
             mailSenderService.send(recordTableDTO.getEmail(), subject, message);
@@ -66,6 +68,7 @@ public class NotificationService {
         try {
             // FIXME: 27.12.2021 убрать заглушку
             recordTableDTO.setRoomId("1");
+            setCurrentZone(recordTableDTO);
             String subject = "Отмена бронирования комнаты №" + recordTableDTO.getRoomId();
             mailSenderService.send(recordTableDTO.getEmail(), subject, getMessageForDeleteRecord(recordTableDTO));
         } catch (Exception e) {
