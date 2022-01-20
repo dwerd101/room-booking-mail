@@ -66,8 +66,6 @@ public class NotificationService {
 
     public void sendConfirmDeleteMessageToEmployee(RecordTableDTO recordTableDTO) {
         try {
-            // FIXME: 27.12.2021 убрать заглушку
-            recordTableDTO.setRoomId("1");
             setCurrentZone(recordTableDTO);
             String subject = "Отмена бронирования комнаты №" + recordTableDTO.getRoomId();
             mailSenderService.send(recordTableDTO.getEmail(), subject, getMessageForDeleteRecord(recordTableDTO));
